@@ -1,0 +1,45 @@
+id: com.abdelilah.lampcontrol
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: '23.08'
+command: lamp-control-panel
+
+finish-args:
+  - --socket=wayland
+  - --socket=x11
+  - --device=dri
+  - --share=ipc
+  - --share=network
+  - --filesystem=host
+
+modules:
+  - name: lamp-control-panel
+    buildsystem: simple
+    build-commands:
+      - npm install --production
+      - cp -R . /app/main/
+      - mkdir -p /app/bin
+      - echo '#!/bin/sh' > /app/bin/lamp-control-panel
+      - echo 'exec zypak-wrapper /app/main/node_modules/.bin/electron /app/main/main.js "$@"' >> /app/bin/lamp-control-panel
+      - chmod +x /app/bin/lamp-control-panel
+      
+      - install -Dm644 build/icon.png /app/share/icons/hicolor/512x512/apps/com.abdelilah.lampcontrol.png
+      - install -Dm644 com.abdelilah.lampcontrol.desktop /app/share/applications/com.abdelilah.lampcontrol.desktop
+
+    sources:
+      - type: archive
+        url: https://codeload.github.com/abdelilah1223/lamp-control-panel/tar.gz/refs/tags/v1.0.0
+        sha256: 44899039c343c8d91755c09f6969eeeedab520f4f52ab9076627036266ad6874
+      - type: file
+        dest-filename: com.abdelilah.lampcontrol.desktop
+        content: |
+          [Desktop Entry]
+          Name=LAMP Control Panel
+          Comment=Advanced LAMP and PHP control dashboard with Electron frontend
+          Exec=lamp-control-panel
+          Icon=com.abdelilah.lampcontrol
+          Type=Application
+          Terminal=false
+          Categories=Development;
