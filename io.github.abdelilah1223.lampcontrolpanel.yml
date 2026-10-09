@@ -1,7 +1,7 @@
 id: io.github.abdelilah1223.lampcontrolpanel
 runtime: org.freedesktop.Platform
 runtime-version: '23.08'
-sdk: org.freedesktop.Sdk
+sdk: org.freedesktop.Sdk 
 base: org.electronjs.Electron2.BaseApp
 base-version: '23.08'
 command: lamp-control-panel
